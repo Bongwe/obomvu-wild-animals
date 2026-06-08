@@ -51,12 +51,12 @@ public class HotSpotScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		SetColorAndAlpha(Color.yellow, HoverAlpha);
+		//SetColorAndAlpha(Color.yellow, HoverAlpha);
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		SetColorAndAlpha(defaultColor, DefaultAlpha);
+		//SetColorAndAlpha(defaultColor, DefaultAlpha);
 	}
 
 	public void OnPointerClick(PointerEventData eventData)
@@ -71,7 +71,13 @@ public class HotSpotScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 			return;
 		}
 
+		if (selectedHotSpot != null)
+		{
+			selectedHotSpot.ResetHotSpotState();
+		}
+
 		selectedHotSpot = this;
+		SetColorAndAlpha(Color.yellow, HoverAlpha);
 
 		if (textBoxDogFacts != null)
 		{
