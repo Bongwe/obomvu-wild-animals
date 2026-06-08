@@ -10,6 +10,7 @@ public class HotSpotScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
 	private Image targetImage;
 	private Color defaultColor;
+	private static HotSpotScript selectedHotSpot;
 	[SerializeField] private GameObject textBoxDogFacts;
 	[SerializeField] private TMP_Text textBoxDogFactsText;
 	[SerializeField] private UnityEvent onClickPointerEvent;
@@ -56,16 +57,21 @@ public class HotSpotScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		SetColorAndAlpha(defaultColor, DefaultAlpha);
-
-		if (textBoxDogFacts != null)
-		{
-			textBoxDogFacts.SetActive(false);
-		}
 	}
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		Debug.Log($"Pointer clicked on {gameObject.name}");
+
+		if (selectedHotSpot == this)
+		{
+			ResetHotSpotState();
+			selectedHotSpot = null;
+			onClickPointerEvent?.Invoke();
+			return;
+		}
+
+		selectedHotSpot = this;
 
 		if (textBoxDogFacts != null)
 		{
@@ -78,6 +84,16 @@ public class HotSpotScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 		}
 
 		onClickPointerEvent?.Invoke();
+	}
+
+	private void ResetHotSpotState()
+	{
+		SetColorAndAlpha(defaultColor, DefaultAlpha);
+
+		if (textBoxDogFacts != null)
+		{
+			textBoxDogFacts.SetActive(false);
+		}
 	}
 
 	private void SetDogFactsText()
